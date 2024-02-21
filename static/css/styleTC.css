@@ -18,8 +18,13 @@ Ferreterias Pineda ----- Etma117, Dany248118  -----> Nexa Forge Labs
 */
 body {
 	font-family: "Roboto", Helvetica, sans-serif;	
-	background-color: #26223b;
+	background-color: #26223b!important;
+	color: white!important; 
 }
+
+h1, h2, h3, p, a {
+	color: white; 
+  }
 
 .navbar {
 	font-family: "Courier New", monospace;
@@ -36,14 +41,12 @@ body {
 }
 
 .dark-text {
-	color: #212121;
+	color: #ffffff;
 }
 
 .conteiner{
 	background-color: #26223b;
 }
-
-
 
 ul{
     padding:0;
@@ -97,3 +100,21 @@ ul li a:hover{
 ul li a:hover:before, ul li a:hover:after{
    	transform: scalex(1);
 }
+
+.btn-custom-info {
+	color: #ffffff!important;
+	background-color: #007777 !important; /* Azul turquesa obscuro */
+	border-color: #007777;
+  }
+
+  .btn-custom-warning {
+	color: #ffffff!important;
+	background-color: #006600 !important;/* Verde obscuro */
+	border-color: #006600;
+  }
+
+  .btn-custom-danger {
+	color: #ffffff!important;
+	background-color: #e76e50 !important; /* Rojo */ 
+	border-color: #e76e50;
+  }
