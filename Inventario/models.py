@@ -5,7 +5,7 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=255, verbose_name='Nombre del Producto')
     medida = models.CharField(max_length=255, verbose_name='Medida (por ejemplo: cm, pulg, kg, oz o litros)', blank=True, null=True,)
     codigo_barras = models.CharField(max_length=255, verbose_name="Codigo de Barra", blank=True, null=True,)
-    codigo_producto = models.CharField(blank=True, null=True, unique= True, max_length=25, verbose_name='Codigo Producto')
+    codigo_producto = models.CharField(blank=True, null=True, max_length=25, verbose_name='Codigo Producto')
     
     existencia = models.PositiveIntegerField(verbose_name='Existencias Disponible', blank=True, null=True,)
     precio_venta = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Precio de Venta', blank=True, null=True,)

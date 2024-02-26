@@ -10,7 +10,7 @@
 {%endblock%}
 
 {% block content %}
-<div class="container mt-5 mb-5" >
+
     <h1 >Lista de Productos</h1>
     <a href="{% url 'producto_create'%}" class="btn btn-custom-warning btn-sm">Nuevo producto</a>
     <div>
@@ -52,7 +52,7 @@
             </table>
         </div>
     </div>
-</div>
+
 
 {% endblock %}
 
@@ -70,7 +70,10 @@
         "pagingType": "full_numbers",
         "lengthMenu": [10, 25, 50],
         "ordering": true,
-        "responsive": true
+        "responsive": true,
+        language: {
+            url: '//cdn.datatables.net/plug-ins/2.0.0/i18n/es-ES.json',
+        },
       });
 </script>
 {%endblock%}

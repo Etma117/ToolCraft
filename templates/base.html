@@ -35,7 +35,10 @@
                         <a class="nav-link" href="{% url 'producto_list' %}">Productos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
+                        <a class="nav-link" href="{%url 'venta_productos'%}">Nueva Venta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Reportes</a>
                     </li>
                 </ul>
             </div>
@@ -43,12 +46,14 @@
     </nav>
 
     <!-- Main Content -->
+    <div class="container mt-5 mb-5" >
     {% block content %}
     <div class="container">
-        <h1 class="my-5 display-1 text-center ">Welcome to My Landing Page<span class="text-danger">!</span></h1>
-        <p class="lead text-center ">Check out our amazing features and affordable pricing plans.<span class="text-primary"> Discover the difference today!</span></p>
+        <h1 class="my-5 display-1 text-center ">ToolCraft - Administra tu ferreteria de forma mas sencilla</span></h1>
+        <p class="lead text-center "></p>
     </div>
     {% endblock %}
+    </div>
 
     <!-- Add jQuery and Bootstrap JS -->
     

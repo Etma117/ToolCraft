@@ -1,0 +1,113 @@
+{% extends 'base.html'%}
+{%block extra_css%}
+<style>
+    .card {
+        width: 20rem;
+        margin: 15px;
+    }
+
+    @media (max-width: 1400px) {
+        .card {
+            width: calc(95%);
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .card {
+            width: calc(80%); 
+        }
+    }
+
+    @media (max-width: 992px) {
+        .card {
+            width: calc(80%);
+        }
+    }
+
+    
+</style>
+{%endblock%}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-6">
+        <div style="display: flex;">
+            <h1>Todos los Productos</h1>            
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="input-group input-group-sm mb-5">
+            {% comment %} <span class="input-group-text" id="inputGroup-sizing-sm">Buscar</span>
+            <input type="text" class="form-control" id="searchInput" aria-label="Buscar" aria-describedby="inputGroup-sizing-sm" name ="Buscar">
+             {% endcomment %}
+            <form class ="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="GET">
+                <div class = "input-group">
+                    <input type = "text" class ="form-control bg-light border-0 small" placeholder ="Buscar..." name="Buscar" value="">
+                
+                    <button class ="btn btn-primary" type="submit"></button>
+                <div class="input-group-append">
+        </div>
+        </div> 
+            </form>
+
+        </div>
+    </div>
+        {% comment %} <input class="form-control" type="text" id="searchInput" placeholder="Buscar por nombre"> {% endcomment %}
+</div>
+<div class="row">
+    {% for Producto in Productos %}
+        <div class="col-sm-3">
+            <div class="card card-item" >
+                {% if Producto.imagen %}
+                    <img src="{{ Producto.imagen.url }}" class="card-img-top" style="width: 100%; height:200px;" alt="..." >
+                {% else %}
+                    <div class="card-placeholder" style="width: 100%; height:200px; background-color: #eee; text-align: center; line-height: 200px;">
+                        Sin imagen
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ Producto.nombre }}</h5>
+                    <p class="card-text">Medida: {{Producto.medida}}</p>
+                    <p class="card-text">Precio: ${{ Producto.precio_venta }} MXN</p>                    
+                    <form method="post" action="#">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="id_producto" value ="{{ Producto.id }}">
+                        <button type="submit" class="btn btn-primary"> Añadir Producto <i class="bi bi-plus-circle-fill"></i> </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{%block extra_js%}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Almacena todas las tarjetas con la clase 'card-item'
+        var cards = $(".card-item");
+    
+        $("#").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+    
+            // Recorre cada tarjeta y muestra/oculta según la búsqueda
+            cards.each(function () {
+                var cardText = $(this).text().toLowerCase();
+                if (cardText.indexOf(value) > -1) {
+                    $(this).show();  // Muestra la tarjeta si hay coincidencia
+                } else {
+                    $(this).hide();  // Oculta la tarjeta si no hay coincidencia
+                }
+            });
+        });
+    });
+    
+</script>
+
+
+{%endblock%}
