@@ -21,8 +21,9 @@ class ProductoCreateView(CreateView):
     
 
 class ProductoUpdateView(UpdateView):
-    model = Producto
-    template_name = 'producto_form.html'
+    model = Producto    
+    form_class=  ProductoForm
+    template_name = 'producto_update.html'
     success_url = reverse_lazy('producto_list')
 
 class ProductoDeleteView(DeleteView):
