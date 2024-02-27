@@ -1,7 +1,6 @@
+<!-- producto_detail.html -->
 {% extends 'basemodal.html' %}
-
 {% block title %}Informacion del Producto{% endblock %}
-
 {% block content %}
       <div class="card-body">
         <h2>Informacion del Producto {{producto.nombre}} 
@@ -22,8 +21,7 @@
                 <p class="card-text">Medida: {{producto.medida}}</p>
                 <p class="card-text">Precio: ${{ producto.precio_venta }} MXN</p>                    
             </div>
-        </div>
-        
+        </div>        
         <form method="post" enctype="multipart/form-data" action="{% url 'producto_detail' pk=producto.id %}">
           {% csrf_token %}
           {{ form.as_p }}

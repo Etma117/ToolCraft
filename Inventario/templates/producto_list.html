@@ -1,15 +1,12 @@
 <!-- producto_list.html -->
 {% extends 'base.html' %}
 {%load static%}
-
 {% block title %}Lista de Productos{% endblock %}
 {%block extra_css%}
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.css">
-
 {%endblock%}
 
 {% block content %}
-
     <h1 >Lista de Productos</h1>
     <a href="{% url 'producto_create'%}" class="btn btn-custom-warning btn-sm">Nuevo producto</a>
     <div>
@@ -42,8 +39,6 @@
                     <td>
                         <a href="#" onclick="return abrir_modal('{% url 'producto_detail' pk=producto.id %}')" class="btn btn-custom-info btn-sm">Detalles</a>
                         <a href="#" onclick="return abrir_modal('{% url 'producto_update' pk=producto.id %}')" class="btn btn-custom-warning btn-sm">Editar</a>
-
-                        {% comment %} onclick="return abrir_modal('{% url 'EditarCita' pk=cita.id %}')" {% endcomment %}
                         <a onclick="return abrir_modal('{% url 'producto_delete' pk=producto.id %}')" href="#" class="btn btn-custom-danger btn-sm" style="margin-top: 5px; ">Eliminar</a>
 
                     </td>
@@ -58,8 +53,7 @@
         <div class="modal-content">
             <div id="ventana_modal" class="modal fade" role="dialog"></div>
         </div>
-    </div>
-    
+    </div>    
 
 {% endblock %}
 
@@ -112,5 +106,4 @@
     }
     
 </script>
-
 {%endblock%}
