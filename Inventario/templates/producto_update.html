@@ -3,17 +3,17 @@
 {% block title %}Crear Nuevo Producto{% endblock %}
 
 {% block content %}
-  <div class="container mt-4">
-    <h2>Crear Nuevo Producto</h2>
-    <form method="post" class="mt-4">
-      {% csrf_token %}
-      {{ form.as_p }}
-        <button type="submit" class="btn btn-custom2">Guardar</button>
-        <button class="btn btn-danger" onclick= "cerrar_modal()">Cancelar</button>
-    </form>
-  </div>
+      <div class="card-body">
+        <h2>Editando producto {{producto.nombre}} 
+          {%if producto.medida%}
+          {{producto.medida}}
+          {%endif%}
+        </h2>
+        <form method="post" enctype="multipart/form-data" action="{% url 'producto_update' pk=producto.id %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <button class="btn btn-danger" onclick= "cerrar_modal()">Cancelar</button>
+        </form>
+      </div>
 {% endblock %}
-
-{%block extra_js%}
-
-{%endblock%}

@@ -1,0 +1,21 @@
+{% extends 'basemodal.html' %}
+
+{% block title %}Eliminar{% endblock %}
+
+{% block content %}
+      <div class="card-body">
+        <h2>¿Seguro que quiere eliminar el producto {{producto.nombre}} 
+          {%if producto.medida%}
+          {{producto.medida}} ?
+          {%else%}
+          ?
+          {%endif%}
+        </h2>
+        <form method="post" enctype="multipart/form-data" action="{% url 'producto_delete' pk=producto.id %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <button class="btn btn-success" onclick= "cerrar_modal()">Cancelar</button>
+        </form>
+      </div>
+{% endblock %}
