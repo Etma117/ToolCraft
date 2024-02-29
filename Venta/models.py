@@ -1,57 +1,21 @@
-class Venta:
-    def __init__(self, request):
-        self.request = request
-        self.session = request.session
-        venta = self.session.get("venta")
+from django.db import models
+from django.contrib.auth.models import User
+from Inventario.models import Producto
 
-        if not venta:
-            self.session["venta"]={}
-            self.venta = self.session["venta"]
-        else:
-            self.venta = venta
-    
-    def agregar(self, producto):
-        id = str(producto.id)
-        if id not in self.venta.keys():
-            self.venta[id]={
-                    "producto_id": producto.id,
-                    "nombre": producto.nombre,
-                    "medida": producto.medida,
-                    
-                    "precio_venta": float(producto.precio_venta),
-                    "acumulado": float(producto.precio_venta),
-                    "cantidad": 1,
-                }
-        else:
-            self.venta[id]["cantidad"] +=1
-            self.venta[id]["acumulado"] += float(producto.precio_venta) 
-        self.guardar_venta()
+class VentaModel(models.Model):
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_venta = models.DateTimeField(auto_now_add=True)
 
-    def guardar_venta(self):
-        self.session["venta"] = self.venta
-        self.session.modified = True
+    def __str__(self):
+        return f'{self.fecha_venta}'
 
-    def eliminar (self, producto):
-        id = str (producto.id)
-        if id in self.venta:
-            del self.venta[id]
-            self.guardar_venta()
-    
-    def restar (self, producto):
-        if self.venta[id]["cantidad"] > 0:
-            id = str(producto.id)
-            if id in self.venta.keys():
-                self.venta[id]["cantidad"]  -=1
-                self.venta[id]["acumulado"] -= float(producto.precio_venta)
-                if self.venta[id]["cantidad"] <= 0: self.eliminar (producto)
-                self.guardar_venta()
-    
-    def limpiar (self):
-        self.session["venta"]= {}
+class DetalleVenta(models.Model):
+    venta = models.ForeignKey(VentaModel, related_name='detalle', on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
 
-
-
-
-
-
+    def __str__(self):
+        return f'Detalle {self.id} - {self.producto.nombre} - {self.venta}'
 

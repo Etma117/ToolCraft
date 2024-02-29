@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import Venta
+from .venta import Venta
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import VentaForm 
 from Inventario.models import Producto
+from .models import VentaModel
+
+from .context_processor import total_venta
 from django.db.models import Q
 
 from django.shortcuts import render, redirect
@@ -41,6 +44,19 @@ def agregar_producto(request, producto_id):
     
     return redirect("venta_productos")
 
+def agregar_otro(request, producto_id):
+    venta = Venta(request)
+    producto = Producto.objects.get(id=producto_id)
+    venta.agregar(producto)
+    
+    return redirect("ver_venta")
+
+def restar_producto(request, producto_id):
+    producto = Producto.objects.get(id=producto_id)
+    venta = Venta(request)
+    venta.restar(producto)
+    return redirect('ver_venta')
+
 def eliminar_producto(request, producto_id):
     venta = Venta(request)
     producto = Producto.objects.get(id=producto_id)
@@ -54,7 +70,29 @@ def ver_venta(request):
 
 def realizar_compra(request):
     venta = Venta(request)
+    
     # Lógica para procesar la compra y actualizar modelos
+    total_venta = sum(value['acumulado'] for key, value in venta.venta.items())
+
+    # Crear un objeto de venta en la base de datos
+    nueva_venta = VentaModel(
+        total=total_venta
+    )
+    nueva_venta.save()
+
+    # Iterar sobre los productos vendidos y relacionarlos con la venta
+    for key, value in venta.venta.items():
+        producto = Producto.objects.get(id=value['producto_id'])
+        nueva_venta.detalle.create(
+            producto=producto,
+            cantidad=value['cantidad'],
+            precio_unitario=value['precio_venta'],
+            total=value['acumulado']
+        )
+
+        
+    # Limpiar carrito después de la compra
     venta.limpiar()
+
     return render(request, 'compra_realizada.html')
 
