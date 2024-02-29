@@ -26,6 +26,8 @@
 
     
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-ezQ+zXmDHVtGxu9In6U+3ndFzpLjF8s9b9yFjZG/aI5RLYY+aluT96sfgA5FRd9b" crossorigin="anonymous">
+
 {%endblock%}
 
 {% block content %}
@@ -45,11 +47,21 @@
                 <div class = "input-group">
                     <input type = "text" class ="form-control bg-light border-0 small" placeholder ="Buscar..." name="Buscar" value="">
                 
-                    <button class ="btn btn-primary" type="submit"></button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+
                 <div class="input-group-append">
         </div>
         </div> 
             </form>
+
+            
+            <a class="btn btn-success" href="{% url 'ver_venta' %}">
+                <i class="fas fa-search"></i> Ver Venta
+            </a>
+
+            
 
         </div>
     </div>
