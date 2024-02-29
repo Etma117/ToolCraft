@@ -7,7 +7,7 @@ class VentaModel(models.Model):
     fecha_venta = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.fecha_venta}'
+        return f'Venta{self.id}-{self.fecha_venta}'
 
 class DetalleVenta(models.Model):
     venta = models.ForeignKey(VentaModel, related_name='detalle', on_delete=models.CASCADE)

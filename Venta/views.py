@@ -70,7 +70,11 @@ def ver_venta(request):
 
 def realizar_compra(request):
     venta = Venta(request)
-    
+
+    # Verificar si hay productos en la venta antes de proceder
+    if not venta.venta:
+        return render(request, 'venta_realizada.html', {'mensaje': 'La venta está vacía.'})
+
     # Lógica para procesar la compra y actualizar modelos
     total_venta = sum(value['acumulado'] for key, value in venta.venta.items())
 
@@ -90,9 +94,19 @@ def realizar_compra(request):
             total=value['acumulado']
         )
 
-        
     # Limpiar carrito después de la compra
     venta.limpiar()
 
-    return render(request, 'compra_realizada.html')
+    return render(request, 'venta_realizada.html', {'venta': nueva_venta})
+
+
+
+def todas_las_ventas(request):
+    ventas = VentaModel.objects.all()
+    ventas_detalles = [venta.detalle.all() for venta in ventas]
+    context = {'ventas': ventas, 'ventas_detalles': ventas_detalles}
+    
+    return render(request, 'todas_las_ventas.html', context)
+
+    
 
