@@ -74,7 +74,7 @@
                         {% csrf_token %}
 
                         <input type="hidden" name="id_producto" value ="{{ Producto.id }}">
-                        <button type="submit" class="btn btn-primary"> Añadir Producto <i class="bi bi-plus-circle-fill"></i> </button>
+                        <a class="btn btn-primary" href="{% url 'Agregar' Producto.id %}"> Añadir Producto <i class="bi bi-plus-circle-fill"></i> </a>
                     </form>
                 </div>
             </div>

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Venta</h1>
+  <table class="table table-bordered">
+      <thead>
+          <tr>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Nombre de los productos</th>
+              <th scope="col">Precio unitario</th>
+              <th scope="col">Precio total</th>
+              <th scope="col">Más Opciones</th>
+              
+          </tr>
+      </thead>
+      <tbody>
+          {% if request.session.venta.items|length > 0 %}
+              {% for key, value in request.session.venta.items %}
+                  <tr>
+                      <td>
+                        <a href="#" class="badge btn btn-dark badge-dark">-</a>
+                          {{ value.cantidad }}
+                        <a href="#" class="badge btn btn-dark badge-dark">+</a>
+                      </td>
+                      <td>{{ value.nombre }} {{value.medida}}</td>
+                      <td>{{ value.precio_venta }}</td>
+                      <td>{{ value.acumulado }}</td>
+                      <td>
+                        <a href="#" class="btn btn-custom-info btn-sm">Detalles</a>
+                        <a href="#" class="btn btn-custom-warning btn-sm">Editar</a>
+                        <a href="{% url 'eliminar_producto' value.producto_id %}" class="btn btn-custom-danger btn-sm" style="margin-top: 5px; ">Eliminar</a>
+
+                      </td>
+                      
+                  </tr>
+              {% endfor %}
+          {% else %}
+              <tr>
+                  <td colspan="5">
+                      <div class="alert alert-danger text-center">Sin Productos</div>
+                  </td>
+              </tr>
+          {% endif %}
+      </tbody>
+  </table>
+  <div class="total-div text-right">
+    <p>Total: {{ total_venta }} MXN</p>
+  </div>
+
+{% endblock %}

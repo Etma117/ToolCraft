@@ -1,10 +1,57 @@
-from django.db import models
-from Inventario.models import Producto
-# Create your models here.
+class Venta:
+    def __init__(self, request):
+        self.request = request
+        self.session = request.session
+        venta = self.session.get("venta")
 
-class Venta(models.Model):
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField()
-    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
-    total_venta = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    fecha_venta = models.DateTimeField(auto_now_add=True)
+        if not venta:
+            self.session["venta"]={}
+            self.venta = self.session["venta"]
+        else:
+            self.venta = venta
+    
+    def agregar(self, producto):
+        id = str(producto.id)
+        if id not in self.venta.keys():
+            self.venta[id]={
+                    "producto_id": producto.id,
+                    "nombre": producto.nombre,
+                    "medida": producto.medida,
+                    
+                    "precio_venta": float(producto.precio_venta),
+                    "acumulado": float(producto.precio_venta),
+                    "cantidad": 1,
+                }
+        else:
+            self.venta[id]["cantidad"] +=1
+            self.venta[id]["acumulado"] += float(producto.precio_venta) 
+        self.guardar_venta()
+
+    def guardar_venta(self):
+        self.session["venta"] = self.venta
+        self.session.modified = True
+
+    def eliminar (self, producto):
+        id = str (producto.id)
+        if id in self.venta:
+            del self.venta[id]
+            self.guardar_venta()
+    
+    def restar (self, producto):
+        if self.venta[id]["cantidad"] > 0:
+            id = str(producto.id)
+            if id in self.venta.keys():
+                self.venta[id]["cantidad"]  -=1
+                self.venta[id]["acumulado"] -= float(producto.precio_venta)
+                if self.venta[id]["cantidad"] <= 0: self.eliminar (producto)
+                self.guardar_venta()
+    
+    def limpiar (self):
+        self.session["venta"]= {}
+
+
+
+
+
+
+
