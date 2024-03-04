@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
-from django.views import View
-from .venta import Venta
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import ListView
+from django.db.models import Q
+
 from .forms import VentaForm 
 from Inventario.models import Producto
 from .models import VentaModel
+from .venta import Venta
 
 from .context_processor import total_venta
-from django.db.models import Q
 
-from django.shortcuts import render, redirect
 
 
 class BuscadorProductosMixin:
@@ -29,13 +29,17 @@ class BuscadorProductosMixin:
     def get_context_data(self, **kwargs):
         self.buscar()
         context = super().get_context_data(**kwargs)
-        context['Productos'] = self.productos
+        context['object_list'] = self.productos
         return context
 
 class ProductoListView(BuscadorProductosMixin, ListView):
     model = Producto
     template_name = 'ver_productos_venta.html'
     context_object_name = 'Productos'
+    paginate_by = 32
+    queryset = Producto.objects.order_by("nombre")
+
+   
 
 def agregar_producto(request, producto_id):
     venta = Venta(request)

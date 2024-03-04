@@ -14,13 +14,13 @@
 
     @media (max-width: 1200px) {
         .card {
-            width: calc(80%); 
+            width: calc(90%); 
         }
     }
 
     @media (max-width: 992px) {
         .card {
-            width: calc(80%);
+            width: calc(90%);
         }
     }
 
@@ -45,9 +45,9 @@
              {% endcomment %}
             <form class ="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="GET">
                 <div class = "input-group">
-                    <input type = "text" class ="form-control bg-light border-0 small" placeholder ="Buscar..." name="Buscar" value="">
+                    <input type = "text" class ="form-control bg-light border-0 small" placeholder ="Buscar Producto..." name="Buscar" value="" style="border-radius: 5px;">
                 
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary" type="submit" style="border-radius: 5px; margin-left: 5px;">
                         <i class="fas fa-search"></i> Buscar
                     </button>
 
@@ -56,11 +56,11 @@
         </div> 
             </form>
 
-            
+        <div class="conteiner" style = "margin-left: 15px;">
             <a class="btn btn-success" href="{% url 'ver_venta' %}">
                 <i class="fas fa-search"></i> Ver Venta
             </a>
-
+        </div>
             
 
         </div>
@@ -68,7 +68,7 @@
         {% comment %} <input class="form-control" type="text" id="searchInput" placeholder="Buscar por nombre"> {% endcomment %}
 </div>
 <div class="row">
-    {% for Producto in Productos %}
+    {% for Producto in object_list %}
         <div class="col-sm-3">
             <div class="card card-item" >
                 {% if Producto.imagen %}
@@ -93,7 +93,32 @@
         </div>
     {% endfor %}
 </div>
+<div>
+    Pagina {{page_obj.number}} de {{page_obj.paginator.num_pages}}
+</div>
 
+
+{% if is_paginated %}
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+        <li class="active"><span>{{ i }} <span>(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
 {% endblock %}
 
 {%block extra_js%}
