@@ -1,7 +1,7 @@
 # En tu aplicación venta/urls.py
 
 from django.urls import path
-from .views import  ProductoListView, agregar_producto, agregar_otro, restar_producto, ver_venta, eliminar_producto, realizar_compra, todas_las_ventas
+from .views import  ProductoListView, agregar_producto, agregar_otro, restar_producto, ver_venta, eliminar_producto, realizar_compra, todas_las_ventas, ventas_por_dia
 
 
 
@@ -14,6 +14,8 @@ urlpatterns = [
     path('ver_venta/', ver_venta, name='ver_venta'),
     path('realizar_compra/', realizar_compra, name='realizar_compra'),
 
-    path('todas-las-ventas/', todas_las_ventas, name='todas_las_ventas'),    
+    path('todas-las-ventas/', todas_las_ventas, name='todas_las_ventas'),
+    path('ventas_por_dia/<str:fecha_seleccionada>/', ventas_por_dia, name='ventas_por_dia'),
+    
 
 ]

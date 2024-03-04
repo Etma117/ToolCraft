@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Ventas del día {{ fecha_seleccionada }}</h2>
+    {% if ventas_del_dia %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">ID Venta</th>
+                    <th scope="col">Productos</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Fecha de Venta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas_del_dia %}
+                    <tr>
+                        <td>{{ venta.id }}</td>
+                        <td>
+                            {% for detalle in venta.detalle.all %}
+                                {{ detalle.producto.nombre }} ({{ detalle.cantidad }}),
+                            {% endfor %}
+                        </td>
+                        <td>{{ venta.total }}</td>
+                        <td>{{ venta.fecha_venta }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p>Total de ventas del día: {{ total_ventas }}</p>
+    {% else %}
+        <p>No hay ventas para este día.</p>
+    {% endif %}
+{% endblock %}

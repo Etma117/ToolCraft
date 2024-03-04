@@ -10,6 +10,8 @@ from .context_processor import total_venta
 from django.db.models import Q
 
 from django.shortcuts import render, redirect
+from django.db.models import Sum
+from django.db.models.functions import TruncDate, TruncWeek, TruncMonth
 
 
 class BuscadorProductosMixin:
@@ -107,6 +109,35 @@ def todas_las_ventas(request):
     context = {'ventas': ventas, 'ventas_detalles': ventas_detalles}
     
     return render(request, 'todas_las_ventas.html', context)
+
+
+def ventas_por_dia(request, fecha_seleccionada):
+    # Convierte la fecha de cadena a objeto datetime si es necesario
+    # La fecha_seleccionada debe estar en formato 'YYYY-MM-DD'
+    from datetime import datetime
+    fecha_objeto = datetime.strptime(fecha_seleccionada, '%Y-%m-%d').date()
+
+    # Obtén las ventas para la fecha seleccionada
+    ventas_del_dia = VentaModel.objects.filter(fecha_venta__date=fecha_objeto)
+
+    total_ventas = ventas_del_dia.aggregate(Sum('total'))['total__sum'] or 0
+
+    context = {
+        'fecha_seleccionada': fecha_seleccionada,
+        'ventas_del_dia': ventas_del_dia,
+        'total_ventas': total_ventas,
+    }
+
+    return render(request, 'ventas_por_dia.html', context)
+
+def reporte_ventas_por_semana(request):
+    ventas_por_semana = VentaModel.objects.annotate(semana=TruncWeek('fecha_venta')).values('semana').annotate(total_semana=Sum('total'))
+    return render(request, 'reporte_ventas_por_semana.html', {'ventas_por_semana': ventas_por_semana})
+
+def reporte_ventas_por_mes(request):
+    ventas_por_mes = VentaModel.objects.annotate(mes=TruncMonth('fecha_venta')).values('mes').annotate(total_mes=Sum('total'))
+    return render(request, 'reporte_ventas_por_mes.html', {'ventas_por_mes': ventas_por_mes})
+
 
     
 
