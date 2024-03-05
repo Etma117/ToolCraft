@@ -22,17 +22,17 @@
                                 {{ detalle.producto.nombre }}{{ detalle.producto.medida }} (Cantidad:{{ detalle.cantidad }} pz),
                             {% endfor %}
                         </td>
-                        <td>{{ venta.total_invertido }}</td>
-                        <td>{{ venta.total }}</td>
-                        <td>{{ venta.fecha_venta }}</td>
+                        <td>$ {{ venta.total_invertido }} MXN</td>
+                        <td>$ {{ venta.total }} MXN</td>
+                        <td>$ {{ venta.fecha_venta }} MNX</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
 
-        <p>Total de ventas de la semana: {{ total_ventas }}</p>
-        <p>Total de invertido en la semana: {{ total_invertido }}</p>
-        <p>Total de ganancia de la semana: {{ total_ganancia }}</p>
+        <p>Total de ventas de la semana: $ {{ total_ventas }} MXN</p>
+        <p>Total de invertido en la semana: $ {{ total_invertido }} MXN</p>
+        <p>Total de ganancia de la semana: $ {{ total_ganancia }} MXN</p>
     {% else %}
         <p>No hay ventas para esta semana.</p>
     {% endif %}
