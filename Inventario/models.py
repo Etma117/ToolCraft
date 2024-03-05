@@ -9,7 +9,7 @@ class Producto(models.Model):
     
     existencia = models.PositiveIntegerField(verbose_name='Existencias Disponible', blank=True, null=True,)
     precio_venta = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Precio de Venta', blank=True, null=True,)
-    precio_compra = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Precio de Compra', blank=True, null=True,)
+    precio_compra = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Precio de Compra', default=0)
     
     fecha_creacion = models.DateField(auto_now_add=True, verbose_name='Fecha de Creación')
     

@@ -1,8 +1,9 @@
-<!-- venta_realizada.html -->
-
 {% extends 'base.html' %}
+{%block extra_css%}
 
+{%endblock%}
 {% block content %}
+
 
   {% if venta.detalle.all %}
   <h2>Compra realizada con éxito</h2>
@@ -27,8 +28,24 @@
         {% endfor %}
       </tbody>
     </table>
+
+    
+
   {% else %}
     <h1>{{ mensaje }}</h1>
-    
   {% endif %}
+
+  <div class="container mt-5">
+    <a href="{% url 'mainpage' %}" class="btn btn-secondary btn-lg">
+      <i class="fas fa-home"></i> ir al inicio
+    </a>
+    <a href="{%url 'venta_productos'%}" class="btn btn-primary btn-lg" style="margin-left:5px;">
+      <i class="fas fa-shopping-cart"></i> Registrar Nueva Venta
+    </a>
+    <a href="{%url 'todas_las_ventas'%}" class="btn btn-info btn-lg" style="margin-left:5px;">
+      <i class="fas fa-chart-bar"></i> Ver Reportes
+    </a>
+  </div>
+
+  
 {% endblock %}

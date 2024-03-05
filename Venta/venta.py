@@ -17,6 +17,8 @@ class Venta:
                     "producto_id": producto.id,
                     "nombre": producto.nombre,
                     "medida": producto.medida,
+                    "precio_compra": float(producto.precio_compra),
+                    "acumulado_compra": float(producto.precio_compra),
                     
                     "precio_venta": float(producto.precio_venta),
                     "acumulado": float(producto.precio_venta),
@@ -24,7 +26,8 @@ class Venta:
                 }
         else:
             self.venta[id]["cantidad"] +=1
-            self.venta[id]["acumulado"] += float(producto.precio_venta) 
+            self.venta[id]["acumulado"] += float(producto.precio_venta)
+            self.venta[id]["acumulado_compra"] += float(producto.precio_compra)             
         self.guardar_venta()
 
     def guardar_venta(self):
@@ -42,6 +45,7 @@ class Venta:
         if id in self.venta.keys() and self.venta[id]["cantidad"] > 0:
             self.venta[id]["cantidad"] -= 1
             self.venta[id]["acumulado"] -= float(producto.precio_venta)
+            self.venta[id]["acumulado_compra"] -= float(producto.precio_compra)
 
             if self.venta[id]["cantidad"] <= 0:
                 self.eliminar(producto)

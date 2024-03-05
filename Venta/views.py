@@ -83,10 +83,13 @@ def realizar_compra(request):
 
     # Lógica para procesar la compra y actualizar modelos
     total_venta = sum(value['acumulado'] for key, value in venta.venta.items())
+    total_venta_invertido = sum(value['acumulado_compra'] for key, value in venta.venta.items())
 
     # Crear un objeto de venta en la base de datos
     nueva_venta = VentaModel(
-        total=total_venta
+        total=total_venta,
+        total_invertido = total_venta_invertido,
+        ganancia= total_venta - total_venta_invertido
     )
     nueva_venta.save()
 
@@ -125,11 +128,15 @@ def ventas_por_dia(request, fecha_seleccionada):
     ventas_del_dia = VentaModel.objects.filter(fecha_venta__date=fecha_objeto)
 
     total_ventas = ventas_del_dia.aggregate(Sum('total'))['total__sum'] or 0
+    total_invertido = ventas_del_dia.aggregate(Sum('total_invertido'))['total_invertido__sum'] or 0
+    total_ganancia = ventas_del_dia.aggregate(Sum('ganancia'))['ganancia__sum'] or 0
 
     context = {
         'fecha_seleccionada': fecha_seleccionada,
         'ventas_del_dia': ventas_del_dia,
         'total_ventas': total_ventas,
+        'total_invertido': total_invertido,
+        'total_ganancia': total_ganancia,
     }
 
     return render(request, 'ventas_por_dia.html', context)

@@ -25,7 +25,7 @@
                   
                       <td>{{ value.nombre }} {{value.medida}}</td>
                       <td>{{ value.precio_venta }}</td>
-                      <td>{{ value.acumulado }}</td>
+                      <td>{{ value.acumulado }}</td>                      
                       <td>
                         
                         <a href="{% url 'eliminar_producto' value.producto_id %}" class="btn btn-custom-danger btn-sm" style="margin-top: 5px; ">Eliminar</a>
@@ -49,7 +49,7 @@
     <p>Total: {{ total_venta }} MXN</p>
   </div>
 
-  <a href="{%url 'realizar_compra'%}" class="btn btn-custom-warning btn-sm">Confrimar Compra</a>
+  <a href="{%url 'realizar_compra'%}" class="btn btn-custom-warning btn-sm">Confirmar Compra</a>
 
 
 {% endblock %}

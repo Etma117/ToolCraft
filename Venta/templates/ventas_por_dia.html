@@ -8,7 +8,9 @@
                 <tr>
                     <th scope="col">ID Venta</th>
                     <th scope="col">Productos</th>
+                    <th scope="col">Total Invertido</th>
                     <th scope="col">Total</th>
+
                     <th scope="col">Fecha de Venta</th>
                 </tr>
             </thead>
@@ -18,10 +20,11 @@
                         <td>{{ venta.id }}</td>
                         <td>
                             {% for detalle in venta.detalle.all %}
-                                {{ detalle.producto.nombre }} ({{ detalle.cantidad }}),
+                                {{ detalle.producto.nombre }}{{ detalle.producto.medida }} (Cantidad:{{ detalle.cantidad }} pz),
                             {% endfor %}
                         </td>
-                        <td>{{ venta.total }}</td>
+                        <td>{{ venta.total_invertido }}</td>
+                        <td>{{ venta.total }}</td>                        
                         <td>{{ venta.fecha_venta }}</td>
                     </tr>
                 {% endfor %}
@@ -29,6 +32,8 @@
         </table>
 
         <p>Total de ventas del día: {{ total_ventas }}</p>
+        <p>Total de invertido en el día: {{ total_invertido }}</p>
+        <p>Total de ganancia del día: {{ total_ganancia }}</p>
     {% else %}
         <p>No hay ventas para este día.</p>
     {% endif %}

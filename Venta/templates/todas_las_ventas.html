@@ -2,58 +2,112 @@
 
 {% extends 'base.html' %}
 {% block extra_css %}
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <style>
+    .ui-datepicker {
+      background-color: #333;
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 8px;
+    }
+    
+    /* Cambia el fondo del encabezado */
+    .ui-datepicker-header {
+      background-color: #555;
+      color: #fff;
+      border-bottom: 1px solid #777;
+    }
+    
+    /* Cambia el color del texto de los días */
+    .ui-datepicker-calendar a {
+      color: #fff;
+    }
+    
+    /* Cambia el color del texto de los días al pasar el ratón sobre ellos */
+    .ui-datepicker-calendar a:hover {
+      background-color: #555;
+    }
+    
+    /* Ajusta el fondo de los días seleccionados */
+    .ui-datepicker-calendar .ui-state-active {
+      background-color: #777;
+    }
+    
+    /* Cambia el fondo del día actual */
+    .ui-datepicker-calendar .ui-state-highlight {
+      background-color: #666;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
-  <h2>Todas las Ventas</h2>
-  <input type="text" id="datepicker">
+  <div class="container mt-4">
+    <h2>Todas las Ventas</h2>
+    <div class="input-group mb-3">
+      <input type="text" id="datepicker" class="form-control" placeholder="Seleccionar fecha">
+      <div class="input-group-append">
+        <button class="btn btn-primary" id="buscarVentas" type="button">Buscar</button>
+      </div>
+    </div>
 
-  {% if ventas %}
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">ID Venta</th>
-          <th scope="col">Productos</th>
-          <th scope="col">Total</th>
-          <th scope="col">Fecha de Venta</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for venta in ventas %}
+    {% if ventas %}
+      <table class="table table-bordered">
+        <thead>
           <tr>
-            <td>{{ venta.id }}</td>
-            <td>
-              {% for detalle in venta.detalle.all %}
-                {{ detalle.producto.nombre }}{{ detalle.producto.medida }} (Cantidad:{{ detalle.cantidad }} pz),
-              {% endfor %}
-            </td>
-            <td>{{ venta.total }}</td>
-            <td>{{ venta.fecha_venta }}</td>
+            <th scope="col">ID Venta</th>
+            <th scope="col">Productos</th>
+            <th scope="col">Total Invertido</th>
+            <th scope="col">Total</th>
+            <th scope="col">Ganancia</th>
+            <th scope="col">Fecha de Venta</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <p>No hay ventas registradas.</p>
-  {% endif %}
+        </thead>
+        <tbody>
+          {% for venta in ventas %}
+            <tr>
+              <td>{{ venta.id }}</td>
+              <td>
+                {% for detalle in venta.detalle.all %}
+                  {{ detalle.producto.nombre }}{{ detalle.producto.medida }} (Cantidad:{{ detalle.cantidad }} pz),
+                {% endfor %}
+              </td>
+              <td>{{ venta.total_invertido }}</td>
+              <td>{{ venta.total }}</td>
+              <td>{{ venta.ganancia }}</td>
+              <td>{{ venta.fecha_venta }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No hay ventas registradas.</p>
+    {% endif %}
+  </div>
 {% endblock %}
 
 {% block extra_js %}
-<!-- base.html o tu template base -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <!-- base.html o tu template base -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script>
-  $(function() {
-      $("#datepicker").datepicker({
-          dateFormat: 'yy-mm-dd',
-          onSelect: function(dateText) {
-              // Utiliza JavaScript para redirigir a la URL deseada con la fecha seleccionada
-              window.location.href = `/ventas_por_dia/${dateText}/`;
-          }
-      });
-  });
-</script>
-
+  <script>
+    $(function() {
+        $("#datepicker").datepicker({
+            dateFormat: 'yy-mm-dd',
+            showButtonPanel: true,
+            maxDate: 0, 
+            onSelect: function(dateText) {
+                // Utiliza JavaScript para redirigir a la URL deseada con la fecha seleccionada
+                // window.location.href = `/ventas_por_dia/${dateText}/`; <-- Mantén esto si prefieres la redirección automática
+            }
+        });
+  
+        $("#buscarVentas").on("click", function() {
+            var selectedDate = $("#datepicker").val();
+            if (selectedDate) {
+                window.location.href = `/ventas_por_dia/${selectedDate}/`;
+            }
+        });
+    });
+  </script>
 {% endblock %}
