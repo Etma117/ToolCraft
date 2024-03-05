@@ -12,6 +12,9 @@ from .context_processor import total_venta
 
 from django.db.models import Sum
 from django.db.models.functions import TruncDate, TruncWeek, TruncMonth
+from datetime import datetime, timedelta, date
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 
 class BuscadorProductosMixin:
@@ -119,9 +122,7 @@ def todas_las_ventas(request):
 
 
 def ventas_por_dia(request, fecha_seleccionada):
-    # Convierte la fecha de cadena a objeto datetime si es necesario
-    # La fecha_seleccionada debe estar en formato 'YYYY-MM-DD'
-    from datetime import datetime
+    
     fecha_objeto = datetime.strptime(fecha_seleccionada, '%Y-%m-%d').date()
 
     # Obtén las ventas para la fecha seleccionada
@@ -141,9 +142,37 @@ def ventas_por_dia(request, fecha_seleccionada):
 
     return render(request, 'ventas_por_dia.html', context)
 
-def reporte_ventas_por_semana(request):
-    ventas_por_semana = VentaModel.objects.annotate(semana=TruncWeek('fecha_venta')).values('semana').annotate(total_semana=Sum('total'))
-    return render(request, 'reporte_ventas_por_semana.html', {'ventas_por_semana': ventas_por_semana})
+def ventas_por_semana(request, ano, numero_semana):
+    # Calcula la fecha de inicio y fin de la semana
+    inicio_semana = date.fromisocalendar(ano, numero_semana, 1)
+    fin_semana = inicio_semana + timedelta(days=6)
+
+    # Obtén las ventas para la semana seleccionada
+    ventas_de_la_semana = VentaModel.objects.filter(fecha_venta__range=[inicio_semana, fin_semana])
+
+    total_ventas = ventas_de_la_semana.aggregate(Sum('total'))['total__sum'] or 0
+    total_invertido = ventas_de_la_semana.aggregate(Sum('total_invertido'))['total_invertido__sum'] or 0
+    total_ganancia = ventas_de_la_semana.aggregate(Sum('ganancia'))['ganancia__sum'] or 0
+
+    context = {
+        'ano': ano,
+        'numero_semana': numero_semana,
+        'ventas_de_la_semana': ventas_de_la_semana,
+        'total_ventas': total_ventas,
+        'total_invertido': total_invertido,
+        'total_ganancia': total_ganancia,
+    }
+
+    return render(request, 'ventas_por_semana.html', context)
+
+def enviarSemana(request):
+    ano = request.GET.get('ano', '')
+    semana = request.GET.get('semana', '')
+
+    # Construir la URL utilizando reverse
+    url = reverse('ventas_por_semana', kwargs={'ano': ano, 'numero_semana': semana})
+
+    return HttpResponseRedirect(url)
 
 def reporte_ventas_por_mes(request):
     ventas_por_mes = VentaModel.objects.annotate(mes=TruncMonth('fecha_venta')).values('mes').annotate(total_mes=Sum('total'))

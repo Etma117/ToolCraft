@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Ventas de la semana {{ ano }} - Semana {{ numero_semana }}</h2>
+    {% if ventas_de_la_semana %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">ID Venta</th>
+                    <th scope="col">Productos</th>
+                    <th scope="col">Total Invertido</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Fecha de Venta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas_de_la_semana %}
+                    <tr>
+                        <td>{{ venta.id }}</td>
+                        <td>
+                            {% for detalle in venta.detalle.all %}
+                                {{ detalle.producto.nombre }}{{ detalle.producto.medida }} (Cantidad:{{ detalle.cantidad }} pz),
+                            {% endfor %}
+                        </td>
+                        <td>{{ venta.total_invertido }}</td>
+                        <td>{{ venta.total }}</td>
+                        <td>{{ venta.fecha_venta }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p>Total de ventas de la semana: {{ total_ventas }}</p>
+        <p>Total de invertido en la semana: {{ total_invertido }}</p>
+        <p>Total de ganancia de la semana: {{ total_ganancia }}</p>
+    {% else %}
+        <p>No hay ventas para esta semana.</p>
+    {% endif %}
+{% endblock %}

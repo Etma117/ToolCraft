@@ -42,14 +42,40 @@
 
 {% block content %}
   <div class="container mt-4">
-    <h2>Todas las Ventas</h2>
-    <div class="input-group mb-3">
-      <input type="text" id="datepicker" class="form-control" placeholder="Seleccionar fecha">
+    <h1>Todas las Ventas</h1>
+    <h3 style="margin-right: 5px;">Ver por Día: </h3>
+    <div class="input-group mb-3">      
+      <input class="form-control" type="text" id="datepickerDia" class="form-control" placeholder="Seleccionar fecha" style="border-radius: 5px;">
       <div class="input-group-append">
-        <button class="btn btn-primary" id="buscarVentas" type="button">Buscar</button>
+        <button class="btn btn-primary" id="buscarVentasDia" type="button" style="margin-left: 10px;">Buscar</button>
       </div>
     </div>
 
+    
+    <h3 style="margin-right: 5px;">Ver por Semana: </h3>
+    
+    <form id="semanaForm" class="input-group mb-3">
+      <label for="ano">Año:</label>
+      <input class="form-control" style="margin-left: 10px; border-radius: 5px;" type="number" id="ano" name="ano" value="2024" required>
+  
+      <label for="semana" style="margin-left: 10px;">Semana:</label>
+      <input class="form-control" style="margin-left: 10px; border-radius: 5px;" type="number" id="semana" name="semana" required>
+  
+      <button class="btn btn-primary" type="button" onclick="enviarFormularioSemana()" style="margin-left: 10px; border-radius: 5px; ">Ver Ventas</button>
+    </form>
+
+    <h3 style="margin-right: 5px;">Ver por Mes: </h3>
+    
+    <form id="semanaForm" class="input-group mb-3">
+      <label for="ano">Año:</label>
+      <input class="form-control" style="margin-left: 10px; border-radius: 5px;" type="number" id="ano" name="ano" value="2024" required>
+  
+      <label for="semana" style="margin-left: 10px;">Mes:</label>
+      <input class="form-control" style="margin-left: 10px; border-radius: 5px;" type="number" id="semana" name="semana" required>
+  
+      {% comment %} <button class="btn btn-primary" type="button" onclick="enviarFormularioSemana()" style="margin-left: 10px; ">Ver Ventas</button> {% endcomment %}
+    </form>
+    <h3>Todas las Ventas Registradas</h3>
     {% if ventas %}
       <table class="table table-bordered">
         <thead>
@@ -92,7 +118,7 @@
 
   <script>
     $(function() {
-        $("#datepicker").datepicker({
+        $("#datepickerDia").datepicker({
             dateFormat: 'yy-mm-dd',
             showButtonPanel: true,
             maxDate: 0, 
@@ -102,12 +128,27 @@
             }
         });
   
-        $("#buscarVentas").on("click", function() {
-            var selectedDate = $("#datepicker").val();
+        $("#buscarVentasDia").on("click", function() {
+            var selectedDate = $("#datepickerDia").val();
             if (selectedDate) {
                 window.location.href = `/ventas_por_dia/${selectedDate}/`;
             }
         });
+        
     });
   </script>
+
+  <script>
+function enviarFormularioSemana() {
+    var ano = document.getElementById("ano").value;
+    var semana = document.getElementById("semana").value;
+
+    // Construir la URL utilizando reverse
+    var url = "{% url 'enviar_semana' %}?ano=" + ano + "&semana=" + semana;
+
+    // Redirige a la URL construida
+    window.location.href = url;
+}
+</script>
+
 {% endblock %}
