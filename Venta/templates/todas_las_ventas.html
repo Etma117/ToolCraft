@@ -1,9 +1,13 @@
 <!-- todas_las_ventas.html -->
 
 {% extends 'base.html' %}
+{% block extra_css %}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock %}
 
 {% block content %}
   <h2>Todas las Ventas</h2>
+  <input type="text" id="datepicker">
 
   {% if ventas %}
     <table class="table table-bordered">
@@ -21,7 +25,7 @@
             <td>{{ venta.id }}</td>
             <td>
               {% for detalle in venta.detalle.all %}
-                {{ detalle.producto.nombre }} ({{ detalle.cantidad }}),
+                {{ detalle.producto.nombre }}{{ detalle.producto.medida }} (Cantidad:{{ detalle.cantidad }} pz),
               {% endfor %}
             </td>
             <td>{{ venta.total }}</td>
@@ -33,4 +37,23 @@
   {% else %}
     <p>No hay ventas registradas.</p>
   {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<!-- base.html o tu template base -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+  $(function() {
+      $("#datepicker").datepicker({
+          dateFormat: 'yy-mm-dd',
+          onSelect: function(dateText) {
+              // Utiliza JavaScript para redirigir a la URL deseada con la fecha seleccionada
+              window.location.href = `/ventas_por_dia/${dateText}/`;
+          }
+      });
+  });
+</script>
+
 {% endblock %}
