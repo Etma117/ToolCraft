@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Ventas del Mes {{ ano }} - {{ mes }}</h2>
+
+     {% if ventas_del_mes %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">ID Venta</th>
+                    <th scope="col">Productos</th>
+                    <th scope="col">Total Invertido</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Fecha de Venta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas_del_mes %}
+                    <tr>
+                        <td>{{ venta.id }}</td>
+                        <td>
+                            {% for detalle in venta.detalle.all %}
+                                {{ detalle.producto.nombre }}{{ detalle.producto.medida }} (Cantidad:{{ detalle.cantidad }} pz),
+                            {% endfor %}
+                        </td>
+                        <td>$ {{ venta.total_invertido }} MXN</td>
+                        <td>$ {{ venta.total }} MXN</td>
+                        <td>{{ venta.fecha_venta|date:"F d, Y" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p>Total de ventas del mes: $ {{ total_ventas }} MXN</p>
+        <p>Total de invertido en el mes: $ {{ total_invertido }} MXN</p>
+        <p>Total de ganancia del mes: $ {{ total_ganancia }} MXN</p>
+    {% else %}
+        <p>No hay ventas para este mes.</p>
+    {% endif %}
+{% endblock %}

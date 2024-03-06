@@ -1,6 +1,7 @@
 <!-- todas_las_ventas.html -->
 
 {% extends 'base.html' %}
+
 {% block extra_css %}
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <style>
@@ -11,29 +12,24 @@
       border-radius: 8px;
     }
     
-    /* Cambia el fondo del encabezado */
     .ui-datepicker-header {
       background-color: #555;
       color: #fff;
       border-bottom: 1px solid #777;
     }
     
-    /* Cambia el color del texto de los días */
     .ui-datepicker-calendar a {
       color: #fff;
     }
     
-    /* Cambia el color del texto de los días al pasar el ratón sobre ellos */
     .ui-datepicker-calendar a:hover {
       background-color: #555;
     }
     
-    /* Ajusta el fondo de los días seleccionados */
     .ui-datepicker-calendar .ui-state-active {
       background-color: #777;
     }
     
-    /* Cambia el fondo del día actual */
     .ui-datepicker-calendar .ui-state-highlight {
       background-color: #666;
     }
@@ -43,38 +39,51 @@
 {% block content %}
   <div class="container mt-4">
     <h1>Todas las Ventas</h1>
-    <h3 style="margin-right: 5px;">Ver por Día: </h3>
-    <div class="input-group mb-3">      
-      <input class="form-control" type="text" id="datepickerDia" class="form-control" placeholder="Seleccionar fecha" style="border-radius: 5px;">
-      <div class="input-group-append">
-        <button class="btn btn-primary" id="buscarVentasDia" type="button" style="margin-left: 10px;">Buscar</button>
+
+    <!-- Ver por Día -->
+    <div class="mb-3">
+      <h3>Ver por Día:</h3>
+      <div class="input-group">
+        <input class="form-control" type="text" id="datepickerDia" placeholder="Seleccionar fecha" style="border-radius: 5px;">
+        <div class="input-group-append">
+          <button class="btn btn-primary" id="buscarVentasDia" type="button" style="margin-left: 10px;">Ver Venta</button>
+        </div>
       </div>
     </div>
 
-    
-    <h3 style="margin-right: 5px;">Ver por Semana: </h3>
-    
-    <form id="semanaForm" class="input-group mb-3">
-      <label for="ano">Año:</label>
-      <input class="form-control" style="margin-left: 10px; border-radius: 5px;" type="number" id="ano" name="ano" value="2024" required>
-  
-      <label for="semana" style="margin-left: 10px;">Semana:</label>
-      <input class="form-control" style="margin-left: 10px; border-radius: 5px;" type="number" id="semana" name="semana" required>
-  
-      <button class="btn btn-primary" type="button" onclick="enviarFormularioSemana()" style="margin-left: 10px; border-radius: 5px; ">Ver Ventas</button>
-    </form>
+    <!-- Ver por Semana -->
+    <div class="mb-3">
+      <h3>Ver por Semana:</h3>
+      <form id="semanaForm" action="{% url 'enviar_semana' %}" method="get">
+        {% csrf_token %}
+        <div class="input-group"> 
+          <input type="text" id="datepickerSemana" class="form-control" placeholder="Seleccionar fecha" name="fecha_seleccionada" style="border-radius: 5px;" required>
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="submit" style="margin-left: 10px;">Ver Ventas</button>
+          </div>
+        </div>
+      </form>
+    </div>
 
-    <h3 style="margin-right: 5px;">Ver por Mes: </h3>
-    
-    <form id="semanaForm" class="input-group mb-3">
-      <label for="ano">Año:</label>
-      <input class="form-control" style="margin-left: 10px; border-radius: 5px;" type="number" id="ano" name="ano" value="2024" required>
-  
-      <label for="semana" style="margin-left: 10px;">Mes:</label>
-      <input class="form-control" style="margin-left: 10px; border-radius: 5px;" type="number" id="semana" name="semana" required>
-  
-      {% comment %} <button class="btn btn-primary" type="button" onclick="enviarFormularioSemana()" style="margin-left: 10px; ">Ver Ventas</button> {% endcomment %}
-    </form>
+    <!-- Ver por Mes -->
+    <div class="mb-3">
+      <h3>Ver por Mes:</h3>
+      <form method="post" action="{% url 'ventas_por_mes' %}" class="row">
+        {% csrf_token %}
+        <div class="form-group col-md-6">
+          {{ form.mes }}
+        </div>
+        <div class="form-group col-md-3">
+          {{ form.ano }}
+        </div>
+        <div class="form-group col-md-3">
+          <button class="btn btn-primary" type="submit">Ver Ventas</button>
+        </div>
+      </form>
+    </div>
+
+
+    <!-- Todas las Ventas Registradas -->
     <h3>Todas las Ventas Registradas</h3>
     {% if ventas %}
       <table class="table table-bordered">
@@ -127,6 +136,31 @@
                 // window.location.href = `/ventas_por_dia/${dateText}/`; <-- Mantén esto si prefieres la redirección automática
             }
         });
+
+        $("#datepickerSemana").datepicker({
+          dateFormat: 'yy-mm-dd',
+          showButtonPanel: true,
+          maxDate: 0, 
+          onSelect: function(dateText) {
+              // Utiliza JavaScript para redirigir a la URL deseada con la fecha seleccionada
+              // window.location.href = `/ventas_por_dia/${dateText}/`; <-- Mantén esto si prefieres la redirección automática
+          }
+      });
+
+      $('.datepickerMes').datepicker({
+        format: 'mm/yyyy',  // Establece el formato del mes y el año
+        startView: 'months',  // Inicia mostrando la vista de meses
+        minViewMode: 'months',  // Establece la vista mínima a meses
+        autoclose: true,  // Cierra automáticamente el calendario al seleccionar una fecha
+        language: 'es'  // Establece el idioma (ajusta según tus necesidades)
+    });
+    
+    // Función para enviar el formulario
+    function enviarFormularioMes() {
+        var fechaMes = document.getElementById("fecha_mes").value;
+        // Puedes realizar más operaciones o enviar el formulario a tu vista aquí
+    }
+        
   
         $("#buscarVentasDia").on("click", function() {
             var selectedDate = $("#datepickerDia").val();
@@ -138,17 +172,6 @@
     });
   </script>
 
-  <script>
-function enviarFormularioSemana() {
-    var ano = document.getElementById("ano").value;
-    var semana = document.getElementById("semana").value;
-
-    // Construir la URL utilizando reverse
-    var url = "{% url 'enviar_semana' %}?ano=" + ano + "&semana=" + semana;
-
-    // Redirige a la URL construida
-    window.location.href = url;
-}
-</script>
+  
 
 {% endblock %}

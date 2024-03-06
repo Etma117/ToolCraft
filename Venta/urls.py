@@ -3,7 +3,7 @@
 from django.urls import path
 from .views import  ProductoListView, agregar_producto, agregar_otro, restar_producto, ver_venta, eliminar_producto, realizar_compra
 
-from .views import todas_las_ventas, ventas_por_dia, ventas_por_semana, enviarSemana
+from .views import todas_las_ventas, ventas_por_dia, ventas_por_semana, enviarSemana, ventas_por_mes
 
 urlpatterns = [
     path('nueva-venta/', ProductoListView.as_view(), name='venta_productos'),
@@ -20,6 +20,8 @@ urlpatterns = [
 
     path('ventas_por_semana/<int:ano>/<int:numero_semana>/', ventas_por_semana, name='ventas_por_semana'),
     path('enviar-semana/', enviarSemana, name='enviar_semana'),
+
+    path('ventas_por_mes/', ventas_por_mes, name='ventas_por_mes'),
 
     
 

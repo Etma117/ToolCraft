@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 from django.db.models import Q
 
-from .forms import VentaForm 
+from .forms import VentaForm, MesAnoForm
 from Inventario.models import Producto
 from .models import VentaModel
 from .venta import Venta
@@ -116,7 +116,20 @@ def realizar_compra(request):
 def todas_las_ventas(request):
     ventas = VentaModel.objects.all()
     ventas_detalles = [venta.detalle.all() for venta in ventas]
-    context = {'ventas': ventas, 'ventas_detalles': ventas_detalles}
+    
+    if request.method == 'POST':
+        form = MesAnoForm(request.POST)
+        if form.is_valid():
+            # Procesar el formulario y redirigir a la página de ventas del mes
+            mes = form.cleaned_data['mes']
+            ano = form.cleaned_data['ano']
+            
+            # Puedes redirigir a la vista por mes con los datos del formulario
+            return HttpResponseRedirect(f'/ventas-por-mes/{ano}/{mes}/')
+    else:
+        form = MesAnoForm()
+
+    context = {'ventas': ventas, 'ventas_detalles': ventas_detalles, 'form': form}
     
     return render(request, 'todas_las_ventas.html', context)
 
@@ -166,18 +179,48 @@ def ventas_por_semana(request, ano, numero_semana):
     return render(request, 'ventas_por_semana.html', context)
 
 def enviarSemana(request):
-    ano = request.GET.get('ano', '')
-    semana = request.GET.get('semana', '')
+    # Obtén la fecha desde el formulario del HTML (asegúrate de que sea un formato adecuado)
+    fecha_seleccionada_str = request.GET.get('fecha_seleccionada', '')
+    
+    # Convierte la cadena a un objeto de fecha
+    fecha_seleccionada = datetime.strptime(fecha_seleccionada_str, '%Y-%m-%d').date()
+
+    # Obtén el número de semana y el año para la fecha seleccionada
+    numero_semana = fecha_seleccionada.isocalendar()[1]
+    ano_semana = fecha_seleccionada.year
 
     # Construir la URL utilizando reverse
-    url = reverse('ventas_por_semana', kwargs={'ano': ano, 'numero_semana': semana})
+    url = reverse('ventas_por_semana', kwargs={'ano': ano_semana, 'numero_semana': numero_semana})
 
     return HttpResponseRedirect(url)
 
-def reporte_ventas_por_mes(request):
-    ventas_por_mes = VentaModel.objects.annotate(mes=TruncMonth('fecha_venta')).values('mes').annotate(total_mes=Sum('total'))
-    return render(request, 'reporte_ventas_por_mes.html', {'ventas_por_mes': ventas_por_mes})
+def ventas_por_mes(request):
+    if request.method == 'POST':
+        form = MesAnoForm(request.POST)
+        if form.is_valid():
+            ano = form.cleaned_data['ano']
+            mes = form.cleaned_data['mes']
+            
+            # Lógica para obtener las ventas del mes
+            # Ajusta esto según tus modelos y lógica específica
+            ventas_del_mes = VentaModel.objects.filter(fecha_venta__year=ano, fecha_venta__month=mes)
+            
+            total_ventas = ventas_del_mes.aggregate(Sum('total'))['total__sum'] or 0
+            total_invertido = ventas_del_mes.aggregate(Sum('total_invertido'))['total_invertido__sum'] or 0
+            total_ganancia = ventas_del_mes.aggregate(Sum('ganancia'))['ganancia__sum'] or 0
 
+            context = {
+                'ano': ano,
+                'mes': mes,
+                'ventas_del_mes': ventas_del_mes,
+                'total_ventas': total_ventas,
+                'total_invertido': total_invertido,
+                'total_ganancia': total_ganancia,
+            }
 
-    
+            return render(request, 'ventas_por_mes.html', context)
+    else:
+        form = MesAnoForm()
+
+    return render(request, 'ventas_por_mes_form.html', {'form': form})
 
