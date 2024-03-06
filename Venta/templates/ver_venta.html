@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if messages %}
+        {% for message in messages %}
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    mostrarAlerta("{{ message }}", "{{ message.tags }}");
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
+
+<div id="custom-alert-container" class="fixed-top ml-2 mt-2" style="z-index: 1000;"></div>
+
   <h1>Venta</h1>
   <table class="table table-bordered">
       <thead>
@@ -53,3 +65,27 @@
 
 
 {% endblock %}
+{%block extra_js%}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    function mostrarAlerta(mensaje, tipo) {
+        var alertaHTML = `
+            <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+                ${mensaje}
+            </div>
+        `;
+    
+        // Agrega el alerta al contenedor
+        document.getElementById('custom-alert-container').innerHTML = alertaHTML;
+    
+        // Desvanece la alerta 
+        setTimeout(function() {
+            $('#custom-alert-container').fadeOut('slow', function() {
+                $(this).html('');  // Limpia el contenido después de desvanecerse
+            });
+        }, 2000);
+    }
+</script>
+
+{%endblock%}

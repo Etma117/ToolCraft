@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 from django.db.models import Q
+from django.contrib import messages
 
 from .forms import VentaForm, MesAnoForm
 from Inventario.models import Producto
@@ -50,6 +51,9 @@ def agregar_producto(request, producto_id):
     venta = Venta(request)
     producto = Producto.objects.get(id=producto_id)
     venta.agregar(producto)
+
+    # Agrega un mensaje
+    messages.success(request, f"Producto {producto.nombre} de {producto.medida} agregado a la venta.")
     
     return redirect("venta_productos")
 
@@ -57,6 +61,9 @@ def agregar_otro(request, producto_id):
     venta = Venta(request)
     producto = Producto.objects.get(id=producto_id)
     venta.agregar(producto)
+
+    # Agrega un mensaje
+    messages.success(request, f"Producto {producto.nombre} de {producto.medida} agregado a la venta.")
     
     return redirect("ver_venta")
 
