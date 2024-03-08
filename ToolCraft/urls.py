@@ -25,4 +25,5 @@ urlpatterns = [
 
     path('', include('Inventario.urls')),
     path('', include('Venta.urls')),
+    path('', include('Login.urls')),
 ]

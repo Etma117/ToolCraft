@@ -16,6 +16,7 @@ from django.db.models.functions import TruncDate, TruncWeek, TruncMonth
 from datetime import datetime, timedelta, date
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class BuscadorProductosMixin:
@@ -38,13 +39,18 @@ class BuscadorProductosMixin:
         context['object_list'] = self.productos
         return context
 
-class ProductoListView(BuscadorProductosMixin, ListView):
+class ProductoListView(LoginRequiredMixin, BuscadorProductosMixin, ListView):
+
+    login_url = 'login'  # URL de inicio de sesión
+    redirect_field_name = 'next'  # Nombre del campo de redireccionamiento
+
     model = Producto
     template_name = 'ver_productos_venta.html'
     context_object_name = 'Productos'
     paginate_by = 32
     queryset = Producto.objects.order_by("nombre")
 
+    
    
 
 def agregar_producto(request, producto_id):
