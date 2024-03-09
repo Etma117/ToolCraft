@@ -61,7 +61,9 @@
     <p>Total: {{ total_venta }} MXN</p>
   </div>
 
-  <a href="{%url 'realizar_compra'%}" class="btn btn-custom-warning btn-sm">Confirmar Compra</a>
+    <a class="btn btn-success" href="{%url 'realizar_compra'%}">
+        <i class="fa-solid fa-check" style="margin-right: 5px;"></i>Confirmar Compra
+    </a>
 
 
 {% endblock %}

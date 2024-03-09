@@ -106,9 +106,9 @@
                   {{ detalle.producto.nombre }}{{ detalle.producto.medida }} (Cantidad:{{ detalle.cantidad }} pz),
                 {% endfor %}
               </td>
-              <td>{{ venta.total_invertido }}</td>
-              <td>{{ venta.total }}</td>
-              <td>{{ venta.ganancia }}</td>
+              <td> $ {{ venta.total_invertido }} MXN</td>
+              <td> $ {{ venta.total }} MXN</td>
+              <td> $ {{ venta.ganancia }} MXN</td>
               <td>{{ venta.fecha_venta }}</td>
             </tr>
           {% endfor %}
