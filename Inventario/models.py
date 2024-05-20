@@ -7,7 +7,7 @@ class Producto(models.Model):
     codigo_barras = models.CharField(max_length=255, verbose_name="Codigo de Barra", blank=True, null=True,)
     codigo_producto = models.CharField(blank=True, null=True, max_length=25, verbose_name='Codigo Producto')
     
-    existencia = models.PositiveIntegerField(verbose_name='Existencias Disponible', blank=True, null=True,)
+    existencia = models.IntegerField(default=0,max_length=255, verbose_name='Existencias')
     precio_venta = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Precio de Venta', blank=True, null=True,)
     precio_compra = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Precio de Compra', default=0)
     
@@ -17,6 +17,7 @@ class Producto(models.Model):
 
 
     # NOMBRE 	MEDIDA	CODIGO DE BARRA	CODIGO/PRODUCTO 	EXISTENCIA 	 PRECIO/VENTA 	 PRECIO/COMPRA  
+
 
 
     def __str__(self):

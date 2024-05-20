@@ -50,40 +50,67 @@ class ProductoListView(LoginRequiredMixin, BuscadorProductosMixin, ListView):
     paginate_by = 32
     queryset = Producto.objects.order_by("nombre")
 
-    
-   
-
+  
 def agregar_producto(request, producto_id):
     venta = Venta(request)
-    producto = Producto.objects.get(id=producto_id)
-    venta.agregar(producto)
+    try:
+        producto = Producto.objects.get(id=producto_id)
+        if producto.existencia > 0:
+            venta.agregar(producto)
 
-    # Agrega un mensaje
-    messages.success(request, f"Producto {producto.nombre} de {producto.medida} agregado a la venta.")
-    
+            # Reduce las existencias del producto
+            producto.existencia -= 1
+            producto.save()
+
+            # Agrega un mensaje
+            messages.success(request, f"Producto {producto.nombre} de {producto.medida} agregado a la venta.")
+        else:
+            messages.error(request, f"Lo sentimos, el producto {producto.nombre} de {producto.medida} no está disponible en este momento. Sin existencias")
+    except Producto.DoesNotExist:
+        messages.error(request, "El producto solicitado no existe.")
     return redirect("venta_productos")
 
 def agregar_otro(request, producto_id):
     venta = Venta(request)
-    producto = Producto.objects.get(id=producto_id)
-    venta.agregar(producto)
+    try:
+        producto = Producto.objects.get(id=producto_id)
+        if producto.existencia > 0:
+            venta.agregar(producto)
 
-    # Agrega un mensaje
-    messages.success(request, f"Producto {producto.nombre} de {producto.medida} agregado a la venta.")
-    
+            # Reduce las existencias del producto
+            producto.existencia -= 1
+            producto.save()
+
+            # Agrega un mensaje
+            messages.success(request, f"Producto {producto.nombre} de {producto.medida} agregado a la venta.")
+        else:
+            messages.warning(request, f"Lo sentimos, el producto {producto.nombre} de {producto.medida} no está disponible en este momento.")
+    except Producto.DoesNotExist:
+        messages.error(request, "El producto solicitado no existe.")
     return redirect("ver_venta")
 
 def restar_producto(request, producto_id):
     producto = Producto.objects.get(id=producto_id)
     venta = Venta(request)
     venta.restar(producto)
+
+    # Incrementa las existencias del producto
+    producto.existencia += 1
+    producto.save()
+
+    messages.warning(request, f"Removido una unidad del Producto {producto.nombre} de {producto.medida} de la venta.")
+
     return redirect('ver_venta')
 
 def eliminar_producto(request, producto_id):
     venta = Venta(request)
     producto = Producto.objects.get(id=producto_id)
     venta.eliminar(producto)
+
+    messages.error(request, f"Producto {producto.nombre} de {producto.medida} completamente removido de la venta.")
+
     return redirect('ver_venta')
+
 
 def ver_venta(request):
     venta = Venta(request)

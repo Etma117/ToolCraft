@@ -37,6 +37,8 @@ class Venta:
     def eliminar (self, producto):
         id = str (producto.id)
         if id in self.venta:
+            producto.existencia += self.venta[id]["cantidad"]
+            producto.save()
             del self.venta[id]
             self.guardar_venta()
     

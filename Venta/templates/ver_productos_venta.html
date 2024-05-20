@@ -32,15 +32,15 @@
 
 {% block content %}
 
-{% if messages %}
+<script type="text/javascript">
+    {% if messages %}
         {% for message in messages %}
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    mostrarAlerta("{{ message }}", "{{ message.tags }}");
-                });
-            </script>
+            toastr.{{ message.tags }}("{{ message }}");
         {% endfor %}
     {% endif %}
+</script>
+
+
 
 <div id="custom-alert-container" class="fixed-top ml-2 mt-2" style="z-index: 1000;"></div>
 
@@ -94,6 +94,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ Producto.nombre }}</h5>
                     <p class="card-text">Medida: {{Producto.medida}}</p>
+                    <p class="card-text">Existencias: {{Producto.existencia}}</p>
                     <p class="card-text">Precio: ${{ Producto.precio_venta }} MXN</p>                    
                     <form method="post" action="#">
                         {% csrf_token %}
@@ -178,6 +179,21 @@
         }, 2000);
     }
     </script>
+<script>
+    // Obtén el contenedor del mensaje
+var messageContainer = document.getElementById('django-message');
+
+// Si hay un mensaje, muéstralo
+if (messageContainer.innerHTML.trim() !== '') {
+    // Muestra el contenedor del mensaje
+    messageContainer.classList.remove('hidden');
+
+    // Oculta el mensaje después de 5 segundos
+    setTimeout(function() {
+        messageContainer.classList.add('hidden');
+    }, 5000);
+}
+</script>
 
 
 {%endblock%}
