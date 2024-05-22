@@ -62,6 +62,12 @@ def agregar_producto(request, producto_id):
             producto.existencia -= 1
             producto.save()
 
+            if producto.existencia <= 3:
+                if  producto.existencia ==0:
+                    messages.warning(request, f"No quedan existencias del producto {producto.nombre} de {producto.medida}")
+                else:
+                    messages.warning(request, f"Solo quedan {producto.existencia} existencias del producto {producto.nombre} de {producto.medida}")
+
             # Agrega un mensaje
             messages.success(request, f"Producto {producto.nombre} de {producto.medida} agregado a la venta.")
         else:
@@ -80,6 +86,9 @@ def agregar_otro(request, producto_id):
             # Reduce las existencias del producto
             producto.existencia -= 1
             producto.save()
+
+            if producto.existencia <= 3:
+                messages.warning(request, f"Solo quedan {producto.existencia} existencias del producto {producto.nombre} de {producto.medida}")
 
             # Agrega un mensaje
             messages.success(request, f"Producto {producto.nombre} de {producto.medida} agregado a la venta.")
