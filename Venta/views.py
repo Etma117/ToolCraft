@@ -113,12 +113,24 @@ def restar_producto(request, producto_id):
 
 def eliminar_producto(request, producto_id):
     venta = Venta(request)
-    producto = Producto.objects.get(id=producto_id)
+    try:
+        producto = Producto.objects.get(id=producto_id)
+    except Producto.DoesNotExist:
+        # Si el producto no existe, simplemente omítelo
+        messages.error(request, f"El producto con ID {producto_id} ya no existe. y fue removida toda la venta, consulte sus existencias")
+        venta.limpiar()
+        return redirect('ver_venta')
+
     venta.eliminar(producto)
-
-    messages.error(request, f"Producto {producto.nombre} de {producto.medida} completamente removido de la venta.")
-
+    messages.success(request, f"Producto {producto.nombre} de {producto.medida} completamente removido de la venta.")
     return redirect('ver_venta')
+
+
+def limpiar_venta(request):
+    venta = Venta(request)    
+    carrito = venta.venta 
+    venta.limpiar()
+    return render(request, 'ver_venta.html', {'carrito': carrito})
 
 
 def ver_venta(request):
@@ -140,16 +152,24 @@ def realizar_compra(request):
     # Crear un objeto de venta en la base de datos
     nueva_venta = VentaModel(
         total=total_venta,
-        total_invertido = total_venta_invertido,
-        ganancia= total_venta - total_venta_invertido
+        total_invertido=total_venta_invertido,
+        ganancia=total_venta - total_venta_invertido
     )
     nueva_venta.save()
 
     # Iterar sobre los productos vendidos y relacionarlos con la venta
     for key, value in venta.venta.items():
-        producto = Producto.objects.get(id=value['producto_id'])
+        producto_id = value['producto_id']
+        try:
+            producto = Producto.objects.get(id=producto_id)
+        except Producto.DoesNotExist:
+            # Si el producto no existe, simplemente omítelo
+            continue
+
         nueva_venta.detalle.create(
             producto=producto,
+            nombre_producto=producto.nombre,
+            medida_producto=producto.medida,
             cantidad=value['cantidad'],
             precio_unitario=value['precio_venta'],
             total=value['acumulado']
@@ -159,6 +179,7 @@ def realizar_compra(request):
     venta.limpiar()
 
     return render(request, 'venta_realizada.html', {'venta': nueva_venta})
+
 
 
 

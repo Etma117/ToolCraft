@@ -19,12 +19,12 @@
                         <td>{{ venta.id }}</td>
                         <td>
                             {% for detalle in venta.detalle.all %}
-                                {{ detalle.producto.nombre }}{{ detalle.producto.medida }} (Cantidad:{{ detalle.cantidad }} pz),
+                            {{ detalle.nombre_producto }} {{ detalle.medida_producto }}  (Cantidad:{{ detalle.cantidad }} pz),
                             {% endfor %}
                         </td>
                         <td>$ {{ venta.total_invertido }} MXN</td>
                         <td>$ {{ venta.total }} MXN</td>
-                        <td>$ {{ venta.fecha_venta }} MNX</td>
+                        <td>{{ venta.fecha_venta }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

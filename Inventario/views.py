@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Producto
 from .forms import  ProductoForm
 
+
 class ProductoListView(ListView):
     model = Producto
     template_name = 'producto_list.html'
