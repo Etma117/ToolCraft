@@ -59,7 +59,8 @@
              {% endcomment %}
             <form class ="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="GET">
                 <div class = "input-group">
-                    <input type="text" class="form-control" placeholder="Buscar Producto..." name="Buscar" value="" style="border-radius: 5px; background-color: #343a40; color: white;">
+                    <input type="text" class="form-control" placeholder="Buscar Producto..." name="Buscar" value="" style="border-radius: 5px; background-color: #343a40; color: white;" id="barcodeInput">
+                    <p id="barcodeOutput" style="color: white;"></p>
                     <button class="btn btn-primary" type="submit" style="border-radius: 5px; margin-left: 5px;">
                         <i class="fas fa-search"></i> Buscar
                     </button>
@@ -202,5 +203,19 @@ if (messageContainer.innerHTML.trim() !== '') {
 }
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    const input = document.getElementById('barcodeInput');
+    const output = document.getElementById('barcodeOutput');
+
+    input.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            const barcode = input.value;
+            output.textContent = `Código de barras escaneado: ${barcode}`;
+            input.value = ''; // Limpia el campo de entrada después de procesar el código
+        }
+    });
+});
+</script>
 
 {%endblock%}
