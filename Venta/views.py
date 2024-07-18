@@ -76,6 +76,37 @@ def agregar_producto(request, producto_id):
         messages.error(request, "El producto solicitado no existe.")
     return redirect("venta_productos")
 
+from django.http import JsonResponse
+
+def agregar_varios_productos(request, producto_id):
+    cantidad = int(request.POST.get('cantidad', 1))  # Asume 1 si no se proporciona cantidad
+    venta = Venta(request)
+    try:
+        producto = Producto.objects.get(id=producto_id)
+        if producto.existencia >= cantidad:  # Verifica si hay suficientes existencias
+            venta.agregar_varios(producto, cantidad)
+
+            # Reduce las existencias del producto
+            producto.existencia -= cantidad
+            producto.save()
+
+            if producto.existencia <= 3:
+                if producto.existencia == 0:
+                    messages.warning(request, f"No quedan existencias del producto {producto.nombre} de {producto.medida}")
+                else:
+                    messages.warning(request, f"Solo quedan {producto.existencia} existencias del producto {producto.nombre} de {producto.medida}")
+
+            # Agrega un mensaje
+            messages.success(request, f"Agregadas {cantidad} unidades del producto {producto.nombre} de {producto.medida} a la venta.")
+        else:
+            messages.error(request, f"Lo sentimos, no hay suficientes existencias del producto {producto.nombre} de {producto.medida}. Disponibles: {producto.existencia}")
+    except Producto.DoesNotExist:
+        messages.error(request, "El producto solicitado no existe.")
+    return redirect("venta_productos")
+
+
+
+
 def agregar_otro(request, producto_id):
     venta = Venta(request)
     try:

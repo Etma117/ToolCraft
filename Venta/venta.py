@@ -30,6 +30,26 @@ class Venta:
             self.venta[id]["acumulado_compra"] += float(producto.precio_compra)             
         self.guardar_venta()
 
+    def agregar_varios(self, producto, cantidad):
+        id = str(producto.id)
+        if id not in self.venta.keys():
+            self.venta[id] = {
+                "producto_id": producto.id,
+                "nombre": producto.nombre,
+                "medida": producto.medida,
+                "precio_compra": float(producto.precio_compra),
+                "acumulado_compra": float(producto.precio_compra) * cantidad,
+                
+                "precio_venta": float(producto.precio_venta),
+                "acumulado": float(producto.precio_venta) * cantidad,
+                "cantidad": cantidad,
+            }
+        else:
+            self.venta[id]["cantidad"] += cantidad
+            self.venta[id]["acumulado"] += float(producto.precio_venta) * cantidad
+            self.venta[id]["acumulado_compra"] += float(producto.precio_compra) * cantidad
+        self.guardar_venta()
+
     def guardar_venta(self):
         self.session["venta"] = self.venta
         self.session.modified = True

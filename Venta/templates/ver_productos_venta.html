@@ -95,10 +95,17 @@
                     <h5 class="card-title">{{ Producto.nombre }}</h5>
                     <p class="card-text">Medida: {{Producto.medida}}</p>
                     <p class="card-text">Existencias: {{Producto.existencia}}</p>
-                    <p class="card-text">Precio: ${{ Producto.precio_venta }} MXN</p>                    
+                    <p class="card-text">Precio: ${{ Producto.precio_venta }} MXN</p>   
+                    {% comment %} Form para agregar mas de 1 {% endcomment %}
+                    <form method="POST" action="{% url 'Agregar_varios' Producto.id %}" class="d-flex align-items-center" style="margin-bottom:5px">
+                        {% csrf_token %}
+                        <input type="hidden" name="id_producto" value ="{{ Producto.id }}">
+                        <input class="form-control"type="number" name="cantidad" value="1" min="1" max="{{ producto.existencia }}" required style="width: 80px; margin-right: 5px;">
+                        <button class="btn btn-primary" type="submit">Agregar <i class="bi bi-plus-circle-fill"></i></button>
+                    </form>                    
+                    {% comment %} Form para agregar una unidad del producto {% endcomment %}         
                     <form method="post" action="#">
                         {% csrf_token %}
-
                         <input type="hidden" name="id_producto" value ="{{ Producto.id }}">
                         <a class="btn btn-primary" href="{% url 'Agregar' Producto.id %}"> Añadir Producto <i class="bi bi-plus-circle-fill"></i> </a>
                     </form>
