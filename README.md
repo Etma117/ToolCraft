@@ -1,10 +1,10 @@
 # ToolCraft
 
-**ToolCraft** es una aplicación para la gestión de inventarios, ventas y reportes en un taller de reparaciones. Utiliza códigos de barras o QR para registrar accesorios y productos, y permite llevar un control eficiente de existencias, puntos de venta, y generar reportes personalizados.
+**ToolCraft** es una aplicación para la gestión de inventarios, ventas y reportes en un taller de reparaciones. Registrar accesorios y productos, y permite llevar un control eficiente de existencias, puntos de venta, y generar reportes personalizados.
 
 ## Características
 
-- **Gestión de Inventarios:** Registro y control de accesorios y productos con código de barras o QR.
+- **Gestión de Inventarios:** Registro y control de accesorios y productos.
 - **Punto de Venta (POS):** Sistema para ventas rápidas y control de ingresos.
 - **Reportes:** Generación de reportes de ventas, inventarios y movimientos.
 - **Interfaz de Usuario:** Interfaz simple y clara, con diseño en **HTML**, **CSS** y **Bootstrap**.
@@ -87,7 +87,7 @@ Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
 
 ## Licencia
 
-Este proyecto está licenciado bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto está licenciado bajo la licencia MIT.
 
 ---
 
