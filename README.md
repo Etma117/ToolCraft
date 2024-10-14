@@ -55,7 +55,7 @@ Sigue estos pasos para ejecutar ToolCraft en tu máquina local:
 ### Inventario
 
 1. Accede a la sección de **Inventario** para gestionar tus productos.
-2. Usa la cámara de tu dispositivo o un lector de códigos para registrar nuevos accesorios.
+2. Usa el formulario para registrar nuevos accesorios.
 
 ### Ventas
 
