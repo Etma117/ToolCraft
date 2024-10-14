@@ -14,7 +14,8 @@
 
 ![Pantalla de Inicio](CapturasPantalla/Dashboard.png)
 
-![Gestión de Inventarios](ruta/a/tu/captura2.png)
+![Gestión de Inventarios](CapturasPantalla/Productos.png)
+![Gestión de Inventarios](CapturasPantalla/CrearProductos.png)
 
 ## Instalación
 
