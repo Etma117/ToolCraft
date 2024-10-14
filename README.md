@@ -20,39 +20,6 @@
 
 ![Ventas](CapturasPantalla/Venta.png)
 
-## Instalación
-
-Sigue estos pasos para ejecutar ToolCraft en tu máquina local:
-
-1. Clonar el repositorio:
-    ```bash
-    git clone https://github.com/Etma117/ToolCraft.git
-    cd ToolCraft
-    ```
-
-2. Crear y activar un entorno virtual:
-    ```bash
-    python -m venv env
-    source env/bin/activate  # En macOS/Linux
-    env\Scripts\activate  # En Windows
-    ```
-
-3. Instalar las dependencias:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. Aplicar las migraciones de la base de datos:
-    ```bash
-    python manage.py migrate
-    ```
-
-5. Ejecutar el servidor de desarrollo:
-    ```bash
-    python manage.py runserver
-    ```
-
-6. Acceder a la aplicación desde tu navegador en `http://localhost:8000`.
 
 ## Uso
 
