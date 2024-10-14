@@ -12,7 +12,7 @@
 
 ## Capturas de Pantalla
 
-![Pantalla de Inicio](ruta/a/tu/captura.png)
+![Pantalla de Inicio](CapturasPantalla/Dashboard.png)
 
 ![Gestión de Inventarios](ruta/a/tu/captura2.png)
 
