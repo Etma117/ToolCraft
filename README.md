@@ -16,6 +16,9 @@
 
 ![Gestión de Inventarios](CapturasPantalla/Productos.png)
 ![Gestión de Inventarios](CapturasPantalla/CrearProductos.png)
+![Gestión de Inventarios](CapturasPantalla/EdicionProductos.png)
+
+![Ventas](CapturasPantalla/Venta.png)
 
 ## Instalación
 
