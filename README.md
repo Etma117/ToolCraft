@@ -98,3 +98,8 @@ Este proyecto está licenciado bajo la licencia MIT.
 ### Contacto
 
 Si tienes alguna duda o sugerencia, no dudes en contactarme a través de mi [GitHub](https://github.com/Etma117).
+
+### Servidor de Prueba
+
+Puedes ir a este enlance y probar su funcionamiento: https://toolcraft.onrender.com/
+Nota: Dado que es gratuito el servidor, debes esperar de 2 a 3 minutos en lo que inicia el servidor.
